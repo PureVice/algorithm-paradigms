@@ -4,7 +4,7 @@ def ler_tarefas()->list[list[float,float]]:
 
     """lê as tarefas do arquivo tasks.txt"""
     tarefas_lidas = []
-    with open('/home/hugosantos/algorithm-paradigms/greedy/tasks.txt', 'r') as arquivo:
+    with open('/home/hugosantos/VsCode/temp/algorithm-paradigms/greedy/tasks.txt', 'r') as arquivo:
         numero_tarefas = int(arquivo.readline().strip())
         for tarefa in range(numero_tarefas):
             #cada tarefa é uma lista 
@@ -36,9 +36,9 @@ def agenda_tarefas(tarefas : list)->list:
     if not tarefas:
         return []
         
-    
+
     _tarefas = sorted(tarefas[:], key= lambda x:x[1])
-    print(f"tarefas ordenadas por f(t): \n: {_tarefas}")
+    print(f"tarefas ordenadas por f(t):\n{_tarefas}\n")
 
     tarefas_agendadas = []
     
@@ -59,9 +59,9 @@ def agenda_tarefas(tarefas : list)->list:
 
 def main():
     tarefas = ler_tarefas()
-    print(tarefas)
+    print(f"tarefas lidas: \n{tarefas}\n")
     tarefas_agendadas = agenda_tarefas(tarefas)
-    print(f"\n\n{tarefas_agendadas}")
+    print(f"tarefas agendadas sem sobreposição:\n{tarefas_agendadas}")
     
 if __name__ == "__main__":
     main()
