@@ -4,7 +4,7 @@ def ler_tarefas()->list[list[float,float]]:
 
     """lê as tarefas do arquivo tasks.txt"""
     tarefas_lidas = []
-    with open('tasks.txt', 'r') as arquivo:
+    with open('/home/hugosantos/algorithm-paradigms/greedy/tasks.txt', 'r') as arquivo:
         numero_tarefas = int(arquivo.readline().strip())
         for tarefa in range(numero_tarefas):
             #cada tarefa é uma lista 
@@ -32,21 +32,29 @@ def ler_tarefas()->list[list[float,float]]:
 
 def agenda_tarefas(tarefas : list)->list:
     """maximiza o número de tarefas que não se sobrepõem"""
-    #ordena as tarefas por tempo de finalização
-    _tarefas = sorted(tarefas[:], key= lambda x:x[1])
     
-    tarefas_agendadas = []
+    if not tarefas:
+        return []
+        
+    
+    _tarefas = sorted(tarefas[:], key= lambda x:x[1])
     print(f"tarefas ordenadas por f(t): \n: {_tarefas}")
-    indice = 0
-    while(_tarefas):
-        tarefa_escolhida = _tarefas[indice]
-        tarefas_agendadas.append(tarefa_escolhida)
-        i = 0 #indice para popar da lista
-        for tarefa in _tarefas:
-            if tarefa[0] < tarefa_escolhida[1]:
-                _tarefas.pop(i)
-        indice+=1
 
+    tarefas_agendadas = []
+    
+    tarefas_agendadas.append(_tarefas[0])
+    
+    # tempo de fim da última tarefa agendada
+    ultimo_fim = _tarefas[0][1]
+
+    for tarefa in _tarefas[1:]:
+        
+       #verifica compatibilidade
+        if tarefa[0] >= ultimo_fim:
+            
+            tarefas_agendadas.append(tarefa)
+            ultimo_fim = tarefa[1]
+                
     return tarefas_agendadas
 
 def main():
@@ -54,5 +62,6 @@ def main():
     print(tarefas)
     tarefas_agendadas = agenda_tarefas(tarefas)
     print(f"\n\n{tarefas_agendadas}")
+    
 if __name__ == "__main__":
     main()
