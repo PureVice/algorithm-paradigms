@@ -57,11 +57,59 @@ def agenda_tarefas(tarefas : list)->list:
                 
     return tarefas_agendadas
 
+def _profundidade(_tarefas):
+    
+
+    profundidade_max = 1
+        
+    # tempo de fim da última tarefa agendada
+    ultimo_fim = _tarefas[0][1]
+    profundidade = 1
+    for tarefa in _tarefas[1:]:
+        
+       #verifica incompatibilidade
+        if tarefa[0] < ultimo_fim:
+            
+            profundidade += 1
+            
+        else:
+            ultimo_fim = tarefa[1]
+            profundidade = 1
+            
+        if profundidade > profundidade_max:
+            profundidade_max = profundidade
+            
+    return profundidade_max
+
+def agenda_tarefas_mult_recursos(tarefas : list)-> list:
+    
+    agendamento : dict = {}
+    _tarefas = sorted(tarefas, key=lambda x:x[1])
+    profundidade_max = _profundidade(_tarefas)
+    profundidades = [i for i in range(1, profundidade_max + 1)]
+    
+    i = 1
+    for s_i, f_i in _tarefas:
+        D = profundidades.copy()
+        j = 1
+        for s_j, f_j in _tarefas[:i-1]:
+            #se for compatível:
+            if (f_j>=s_i and len(D)>1):
+                D.pop(j-1)
+        if(len(D)>0):
+            agendamento[i]=D[0]
+        else:
+            agendamento[i]=-1
+        j+=1
+    i+=1
+    return agendamento
+
 def main():
     tarefas = ler_tarefas()
     print(f"tarefas lidas: \n{tarefas}\n")
     tarefas_agendadas = agenda_tarefas(tarefas)
     print(f"tarefas agendadas sem sobreposição:\n{tarefas_agendadas}")
-    
+    #print(profundidade(tarefas))
+    tarefas_mult_recursos = agenda_tarefas_mult_recursos(tarefas)
 if __name__ == "__main__":
     main()
