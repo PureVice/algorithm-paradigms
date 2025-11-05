@@ -1,20 +1,24 @@
-
+import sys
 
 def ler_tarefas()->list[list[float,float]]:
 
     """lê as tarefas do arquivo tasks.txt"""
     tarefas_lidas = []
-    with open('/home/hugosantos/VsCode/temp/algorithm-paradigms/greedy/tasks.txt', 'r') as arquivo:
-        numero_tarefas = int(arquivo.readline().strip())
-        for tarefa in range(numero_tarefas):
-            #cada tarefa é uma lista 
-            #no formato [tempo_inicio, tempo_fim]
-            linha = arquivo.readline().strip()
-            tarefa = linha.split()
-            tarefa[0] = float(tarefa[0]) 
-            tarefa[1] = float(tarefa[1])
-            tarefas_lidas.append(tarefa)
-
+    try:
+        #'/home/hugosantos/VsCode/temp/algorithm-paradigms/greedy/tasks.txt'
+        with open('tasks.txt', 'r') as arquivo:
+            numero_tarefas = int(arquivo.readline().strip())
+            for tarefa in range(numero_tarefas):
+                #cada tarefa é uma lista 
+                #no formato [tempo_inicio, tempo_fim]
+                linha = arquivo.readline().strip()
+                tarefa = linha.split()
+                tarefa[0] = float(tarefa[0]) 
+                tarefa[1] = float(tarefa[1])
+                tarefas_lidas.append(tarefa)
+    except:
+        print("confira o caminho do arquivo")
+        exit()
     # """lê as tarefas da entrada padrão """
     # tarefas_lidas = []
     # numero_tarefas = int(input())
@@ -57,27 +61,32 @@ def agenda_tarefas(tarefas : list)->list:
                 
     return tarefas_agendadas
 
-def _profundidade(_tarefas):
+def _profundidade(_tarefas): 
     
-
-    profundidade_max = 1
+    tarefas_ordenadas = sorted(_tarefas, key=lambda x: x[0])
+    
+    n = len(tarefas_ordenadas)
+    if n == 0:
+        return 0
         
-    # tempo de fim da última tarefa agendada
-    ultimo_fim = _tarefas[0][1]
-    profundidade = 1
-    for tarefa in _tarefas[1:]:
+    profundidade_max = 0
+    
+    for i in range(n):
         
-       #verifica incompatibilidade
-        if tarefa[0] < ultimo_fim:
+        ponto_de_verificacao = tarefas_ordenadas[i][0]
+        
+        profundidade_atual = 0
+        
+        for j in range(n):
+            s_j = tarefas_ordenadas[j][0]
+            f_j = tarefas_ordenadas[j][1]
             
-            profundidade += 1
-            
-        else:
-            ultimo_fim = tarefa[1]
-            profundidade = 1
-            
-        if profundidade > profundidade_max:
-            profundidade_max = profundidade
+            if s_j <= ponto_de_verificacao and f_j > ponto_de_verificacao:
+                profundidade_atual += 1
+                
+        
+        if profundidade_atual > profundidade_max:
+            profundidade_max = profundidade_atual
             
     return profundidade_max
 
@@ -113,8 +122,10 @@ def main():
     tarefas = ler_tarefas()
     print(f"tarefas lidas: \n{tarefas}\n")
     tarefas_agendadas = agenda_tarefas(tarefas)
-    print(f"tarefas agendadas sem sobreposição:\n{tarefas_agendadas}")
+    print(f"tarefas agendadas sem sobreposição:\n{tarefas_agendadas}\n")
     #print(profundidade(tarefas))
     tarefas_mult_recursos = agenda_tarefas_mult_recursos(tarefas)
+    print(f"tarefas agendadas para vários recursos: \n{tarefas_mult_recursos}\n")
+
 if __name__ == "__main__":
     main()
