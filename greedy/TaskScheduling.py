@@ -90,33 +90,43 @@ def _profundidade(_tarefas):
             
     return profundidade_max
 
-def agenda_tarefas_mult_recursos(tarefas : list)-> list:
+def agenda_tarefas_mult_recursos(tarefas : list)-> dict:
     
 
     _tarefas = sorted(tarefas, key=lambda x:x[0])
-    profundidade_max = _profundidade(_tarefas)
-    profundidades = [i for i in range(1, profundidade_max + 1)]
-    agendamento = {i: -1 for i in range(1, len(_tarefas) + 1)}
-    i = 1
+    n = len(_tarefas)
     
-    for s_i, f_i in _tarefas:
+
+    agendamento = {} 
+    
+
+    for i in range(1, n + 1):
         
-        D = set(profundidades)
-        j = 1
-        for s_j, f_j in _tarefas[:i-1]:
-            #se for compatível:
-            if (f_j>=s_i and agendamento[j]!= -1):
-                D.discard(agendamento[j])
+        s_i, f_i = _tarefas[i-1]
+        
+
+        recursos_conflitantes = set()
+        
+
+        for j in range(1, i):
+            
+            s_j, f_j = _tarefas[j-1]
+            
+            if s_i < f_j:
+
+                recursos_conflitantes.add(agendamento[j])
+        
+        recurso_id = 1
+        while True:
+            if recurso_id not in recursos_conflitantes:
+
+                agendamento[i] = recurso_id
+                break 
                 
-            j+=1
-        if(len(D)>0):
-            agendamento[i]=min(D)
-        else:
-            agendamento[i]=-1
-            continue
-        
-        i+=1
+            recurso_id += 1 
+            
     return agendamento
+
 
 def main():
     tarefas = ler_tarefas()
