@@ -1,15 +1,58 @@
+def merge_and_count(L1, L2) -> tuple[int, list]:
+    
+    merged_list : list = []
+    inversoes = ponteiro_L1 = ponteiro_L2 = 0
+    tamanho_L1 = len(L1)
+    tamanho_L2 = len(L2)
+    
+    while((tamanho_L1 - ponteiro_L1) and (tamanho_L2 - ponteiro_L2)):
+        elemento_L1 = L1[ponteiro_L1]
+        elemento_L2 = L2[ponteiro_L2]
+        if(elemento_L2 < elemento_L1): #lista = [4, 5, 3, 1, 2, 6] -> 1, 
+            merged_list.append(elemento_L2)
+            inversoes+= len(L1) - ponteiro_L1 + 1 
+            ponteiro_L1+=1
+        else:
+            merged_list.append(elemento_L1)
+            ponteiro_L2+=2    
+
+    if(not L1):
+        merged_list = merged_list + L1[ponteiro_L1:]
+    else:
+        merged_list = merged_list + L2[ponteiro_L2:]
+
+    return (inversoes, merged_list)
+
+def sort_and_count(L:list):
+    tamanho_lista = len(L)
+    if  tamanho_lista <= 1:
+        return (0, L)
+    
+    metade = tamanho_lista//2
+    L1 = L[0:metade]
+    L2 = L[metade:]
+
+    inversoes1 : tuple[int, list] = sort_and_count(L1)
+    inversoes2 : tuple[int, list] = sort_and_count(L2)
+    inversoes : tuple[int, list] = merge_and_count(L1, L2) 
+    
+    return (inversoes1[0] + inversoes2[0] + inversoes[0], L)
+
+def main():
+    lista = [4, 5, 3, 1, 2, 6]
+    sort_and_count(lista)    
+
+if __name__ == "__main__":
+    main()
 # Sort-and-Count(L)
-#  If the list has one element then
-#   there are no inversions
-#  Else
-#   Divide the list into two halves:
-#    A contains the first ⌈n/2⌉ elements
-#    B contains the remaining ⌊n/2⌋ elements
+
+
 #   (rₐ, A) = Sort-and-Count(A)
 #   (r_b, B) = Sort-and-Count(B)
 #   (r, L) = Merge-and-Count(A, B)
-#  Endif
+#  
 #  Return r = rₐ + r_b + r, and the sorted list L
+
 
 # Merge-and-Count(A, B)
 #  Maintain a Current pointer into each list, initialized to
