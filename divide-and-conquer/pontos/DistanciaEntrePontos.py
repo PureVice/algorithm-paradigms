@@ -25,7 +25,7 @@ def distancia(p1, p2):
 def forca_bruta(pontos):
     """
     encontra o par mais próximo em uma lista pequena (caso base).
-    Retorna (distancia_minima, (ponto1, ponto2))
+    retorna (distancia_minima, (ponto1, ponto2))
     """
     dist_min = float('inf')
     par_min = (None, None)
@@ -41,7 +41,8 @@ def forca_bruta(pontos):
     return (dist_min, par_min)
     
 def encontra_par_mais_proximo(pontos_x, pontos_y:list):
-   
+    """retorna a distância e o ponto com a menor distância, dado um grupo
+    de pontos ordenado"""
     tamanho = len(pontos_x)
     if(tamanho<=3):
         return forca_bruta(pontos_x, pontos_y)
